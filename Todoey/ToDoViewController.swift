@@ -13,8 +13,14 @@ class ToDoViewController : UITableViewController {
     
     var listArray = ["Walk Mocha", "Feed Mocha", "Play with Mocha"]
     
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+            listArray = items
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -50,7 +56,11 @@ class ToDoViewController : UITableViewController {
         let alert = UIAlertController(title: "Add Todoey", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
+           
             self.listArray.append(textFieldText.text!)
+            
+            self.defaults.set(self.listArray, forKey: "TodoListArray")
+            
             self.tableView.reloadData()
         }
         
